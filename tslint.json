@@ -1,0 +1,9 @@
+{
+  "extends": ["tslint:recommended", "tslint-react"],
+  "rules": {
+    "quotemark": false,
+    "semicolon": false,
+    "member-access": false,
+    "trailing-comma": false
+  }
+}
