@@ -1,4 +1,6 @@
 const path = require('path')
+const tsImportPluginFactory = require('ts-import-plugin')
+const autoprefixer = require('autoprefixer')
 const config = require('./config')
 
 const resolve = dir => path.join(__dirname, '..', dir)
@@ -48,21 +50,38 @@ module.exports = {
             loader: 'ts-loader',
             options: {
               // ts-loader配合fork-ts-checker-webpack-plugin插件获取完全的类型检查来加快编译的速度
-              transpileOnly: true
+              transpileOnly: true,
+              getCustomTransformers: () => ({
+                before: [
+                  tsImportPluginFactory({
+                    libraryName: 'antd',
+                    libraryDirectory: 'es',
+                    style: 'css'
+                  })
+                ]
+              }),
+              // compilerOptions: {
+              //   module: 'es2015'
+              // }
             }
           }
         ]
       },
+      // antd样式不启用css-modules
       {
         test: /\.(css|scss)$/,
+        exclude: [resolve('node_modules/antd/')],
         use: [
           'style-loader',
           {
-            loader: 'css-loader',
+            // 使用typings-for-css-modules-loader来解决使用import './xxx.scss'找不到模块的报错问题
+            loader: 'typings-for-css-modules-loader',
             options: {
               importLoaders: 2,
               modules: true,
-              localIdentName: '[name]-[local]-[hash:base64:5]'
+              localIdentName: '[name]-[local]-[hash:base64:5]',
+              namedExport: true,
+              camelCase: true
             }
           },
           {
@@ -84,6 +103,20 @@ module.exports = {
           {
             loader: 'sass-loader'
           }
+        ]
+      },
+      // 针对antd样式 专门配置css-loader
+      {
+        test: /\.css$/,
+        include: [resolve('node_modules/antd/')],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
         ]
       },
       {

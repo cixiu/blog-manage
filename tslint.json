@@ -4,6 +4,8 @@
     "quotemark": false,
     "semicolon": false,
     "member-access": false,
-    "trailing-comma": false
+    "trailing-comma": false,
+    "ordered-imports": false,
+    "no-var-requires": false
   }
 }
