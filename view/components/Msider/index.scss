@@ -1,0 +1,17 @@
+@import '../../common/sass/variable.scss';
+
+.sider {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+}
+.logo {
+  margin: 0 16px;
+  padding: 16px 0;
+  font-size: 20px;
+  border-bottom: 2px solid #28263b;
+  color: $main-color;
+  text-align: center;
+}
+

@@ -70,7 +70,7 @@ module.exports = {
       // antd样式不启用css-modules
       {
         test: /\.(css|scss)$/,
-        exclude: [resolve('node_modules/antd/')],
+        exclude: [/node_modules/],
         use: [
           'style-loader',
           {
@@ -81,7 +81,8 @@ module.exports = {
               modules: true,
               localIdentName: '[name]-[local]-[hash:base64:5]',
               namedExport: true,
-              camelCase: true
+              camelCase: true,
+              slient: true
             }
           },
           {
@@ -108,7 +109,7 @@ module.exports = {
       // 针对antd样式 专门配置css-loader
       {
         test: /\.css$/,
-        include: [resolve('node_modules/antd/')],
+        include: [/node_modules/],
         use: [
           'style-loader',
           {
