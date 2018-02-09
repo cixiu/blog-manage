@@ -6,7 +6,7 @@ const notifier = require('node-notifier')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const webpackMerge = require('webpack-merge')
 const baseConfig = require('./webpack.config.base')
-const config =require('./config')
+const config =require('../config')
 
 const resolve = dir => path.join(__dirname, '..', dir)
 

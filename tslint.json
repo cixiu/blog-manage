@@ -14,6 +14,7 @@
     "arrow-parens": false,
     "jsx-boolean-value": false,
     "no-trailing-whitespace": false,
-    "no-empty": false
+    "no-empty": false,
+    "jsx-curly-spacing": true
   }
 }

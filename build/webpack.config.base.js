@@ -1,7 +1,7 @@
 const path = require('path')
 const tsImportPluginFactory = require('ts-import-plugin')
 const autoprefixer = require('autoprefixer')
-const config = require('./config')
+const config = require('../config')
 
 const resolve = dir => path.join(__dirname, '..', dir)
 

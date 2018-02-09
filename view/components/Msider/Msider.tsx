@@ -16,6 +16,7 @@ interface IMenuItem {
 class Msider extends React.Component<IProps, {}> {
   state = {
     siderList: [
+      { key: '/admin_list', type: 'team', text: '管理员列表' },
       { key: '/user_list', type: 'user', text: '用户列表' },
       { key: '/create_topic', type: 'form', text: '发布文章' },
       { key: '/topic_list', type: 'table', text: '文章列表' }

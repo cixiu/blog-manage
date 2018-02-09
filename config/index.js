@@ -36,5 +36,6 @@ module.exports = {
     // 服务端host和port
     host: '0.0.0.0',
     port: serverPort,
+    db_url: 'mongodb://localhost:27017/node-blog'
   }
 }

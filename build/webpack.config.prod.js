@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpackMerge = require('webpack-merge')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const baseConfig = require('./webpack.config.base')
-const config = require('./config')
+const config = require('../config')
 
 const resolve = dir => path.join(__dirname, '..', dir)
 
