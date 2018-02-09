@@ -135,7 +135,7 @@ class Admin extends AddressComponent {
   async getAdminInfo(ctx, next) {
     const { admin_id } = ctx.session
     if (!admin_id) {
-      console.log('管理员的session失效')
+      console.log('管理员的session失效或者未登录')
       ctx.body = {
         code: 1,
         message: '获取管理员信息失败'
