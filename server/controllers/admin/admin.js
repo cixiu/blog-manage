@@ -126,6 +126,22 @@ class Admin extends AddressComponent {
       }
     }
   }
+  // 退出登录
+  async logout(ctx, next) {
+    try {
+      delete ctx.session.admin_id
+      ctx.body = {
+        code: 0,
+        message: '退出成功'
+      }
+    } catch (err) {
+      console.log('退出失败', err)
+      ctx.body = {
+        code: 1,
+        message: '退出失败'
+      }
+    }
+  }
   // 密码加盐
   md5(password) {
     const newPassword = md5(md5(password + 'hello@web.com') + '132753skldf')

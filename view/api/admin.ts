@@ -18,6 +18,16 @@ export const login = async (data: ILoginData) => {
   }
 }
 
+// 管理员退出登录
+export const logout = async () => {
+  try {
+    const res = await axios.get('/api/admin/logout')
+    return Promise.resolve(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 // 管理员信息
 export const getAdminInfo = async () => {
   try {

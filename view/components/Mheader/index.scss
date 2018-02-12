@@ -2,5 +2,9 @@
   width: 100%
 }
 .user {
-  color: #fff
+  text-align: right;
+  color: rgba($color: #fff, $alpha: .65)
+}
+.avatar {
+  margin-right: 5px;
 }

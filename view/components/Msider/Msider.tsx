@@ -1,17 +1,13 @@
 import * as React from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { Layout, Menu, Icon } from 'antd'
+import { ClickParam } from 'antd/lib/menu'
 
 import * as styles from './index.scss'
 
 const { Sider } = Layout
 
 interface IProps extends RouteComponentProps<any> {}
-
-interface IMenuItem {
-  key: string
-  keyPath: string[]
-}
 
 class Msider extends React.Component<IProps, {}> {
   state = {
@@ -23,7 +19,7 @@ class Msider extends React.Component<IProps, {}> {
     ]
   }
 
-  selectItem = ({ key }: IMenuItem) => {
+  selectItem = ({ key }: ClickParam) => {
     this.props.history.push(`${key}`)
   }
 
