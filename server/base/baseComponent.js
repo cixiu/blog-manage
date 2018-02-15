@@ -1,5 +1,10 @@
 const axios = require('axios')
+const qiniu = require('qiniu')
+const dateFormat = require('dateformat')
 const Ids = require('../models/ids')
+
+qiniu.conf.ACCESS_KEY = 'uzq4hVSsnTdlKvDIJ7mCq_A2ugsbk2Jn-SSpdTBE'
+qiniu.conf.SECRET_KEY = 'iGO_mnUZhSLwLNaagmL6g-TKLqIeqFJ1Ny5Pw1cg'
 
 class BaseComponent {
   constructor() {
@@ -28,9 +33,35 @@ class BaseComponent {
       params: data,
       data,
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'pplication/json'
       }
+    })
+  }
+  async uploadImg(ctx, next) {}
+  async qiniu() {
+    const time = + new Date()
+    const key = dateFormat(time, 'yyyy/mm/dd') + '/' + time
+    try {
+      const token = this.uptoken('blog', key)
+      // const qiniuImg = await this.uploadFile(token, key, )
+    } catch (err) {}
+  }
+  uptoken(bucket, key) {
+    let putPolicy = new qiniu.rs.PutPolicy(bucket + ':' + key)
+    return putPolicy.token()
+  }
+  uploadFile(uptoken, key, localFile) {
+    return new Promise((resolve, reject) => {
+      var extra = new qiniu.io.PutExtra()
+      qiniu.io.putFile(uptoken, key, localFile, extra, function(err, ret) {
+        if (!err) {
+          resolve(ret.key)
+        } else {
+          console.log('图片上传至七牛失败', err)
+          reject(err)
+        }
+      })
     })
   }
 }

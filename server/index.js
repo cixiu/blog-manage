@@ -16,7 +16,18 @@ const SESSION_CONFIG = {
   signed: true
 }
 app.use(session(SESSION_CONFIG, app))
-app.use(koaBody())
+app.use(koaBody({
+  formLimit: 1024 * 1024,
+  textLimit: 1024 * 1024,
+  multipart: true,
+  formidable: {
+    keepExtensions: true,
+    uploadDir: __dirname + '/public/images',
+    onFileBegin: (name, file) => {
+      file.path = __dirname + '/public/images/' + file.name
+    }
+  }
+}))
 
 router(app)
 

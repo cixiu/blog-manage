@@ -23,6 +23,8 @@
     "koa-session": "^5.8.1",
     "md5": "^2.2.1",
     "mongoose": "^5.0.3",
+    "qiniu": "^7.1.2",
+    "quill-magic-url": "^0.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0-beta.18",

@@ -32,7 +32,7 @@ class Editor extends React.Component<IProps, {}> {
     }
   }
   componentDidUpdate() {
-    console.log(this.reactQuillRef.getEditor().getText())
+    console.log(this.reactQuillRef.getEditor())
   }
 
   handleChange: ReactQuillProps['onChange'] = (
@@ -44,6 +44,10 @@ class Editor extends React.Component<IProps, {}> {
     this.props.onChange(content, editor)
   }
 
+  imageHander = (image: any, cb: any) => {
+    console.log(image)
+  }
+
   render() {
     return (
       <ReactQuill
@@ -53,6 +57,7 @@ class Editor extends React.Component<IProps, {}> {
         onChange={this.handleChange}
         modules={modules}
         formats={formats}
+        // imageHander={this.imageHander}
         ref={el => (this.reactQuillRef = el as ReactQuill)}
       />
     )

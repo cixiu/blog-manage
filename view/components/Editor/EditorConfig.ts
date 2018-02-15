@@ -1,3 +1,7 @@
+// import Quill from 'quill'
+// import magicUrl from 'quill-magic-url'
+// Quill.register('modules/magicUrl', magicUrl)
+
 export const modules = {
   toolbar: [
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
