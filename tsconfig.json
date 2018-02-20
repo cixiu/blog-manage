@@ -23,7 +23,7 @@
     // 不是函数的所有返回路径都有返回值时报错。
     "noImplicitReturns": true,
     // 当 this表达式的值为 any类型的时候，生成一个错误
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     // 在表达式和声明上有隐含的 any类型时报错。
     "noImplicitAny": true,
     // 在严格的 null检查模式下， null和 undefined值不包含在任何类型里，只允许用它们自己和 any来赋值（有个例外， undefined可以赋值到 void）

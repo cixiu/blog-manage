@@ -1,6 +1,7 @@
 const Koa = require('koa')
 const session = require('koa-session')
 const koaBody = require('koa-body')
+const path = require('path')
 const config = require('../config/index')
 const db = require('./mongodb/db')
 const router = require('./routes')
@@ -22,9 +23,9 @@ app.use(koaBody({
   multipart: true,
   formidable: {
     keepExtensions: true,
-    uploadDir: __dirname + '/public/images',
+    uploadDir: path.join(__dirname, '../public/images'),
     onFileBegin: (name, file) => {
-      file.path = __dirname + '/public/images/' + file.name
+      file.path = path.join(__dirname, '../public/images/' + file.name)
     }
   }
 }))

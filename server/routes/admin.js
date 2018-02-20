@@ -8,5 +8,6 @@ router.get('/logout', Admin.logout)
 router.get('/info', Admin.getAdminInfo)
 router.get('/list', Admin.getAdminList)
 router.get('/count', Admin.getAdminCount)
+router.post('/upload', Admin.uploadImg)
 
 module.exports = router

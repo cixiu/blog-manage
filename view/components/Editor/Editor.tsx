@@ -19,6 +19,11 @@ interface IProps {
 class Editor extends React.Component<IProps, {}> {
   reactQuillRef: ReactQuill
 
+  state = {
+    // reactQuillRef: undefined,
+    modules: undefined
+  }
+
   componentDidMount() {
     if (this.props.backfill) {
       this.setState(
@@ -30,9 +35,9 @@ class Editor extends React.Component<IProps, {}> {
         }
       )
     }
-  }
-  componentDidUpdate() {
-    console.log(this.reactQuillRef.getEditor())
+    this.setState({
+      modules: modules(this.reactQuillRef)
+    })
   }
 
   handleChange: ReactQuillProps['onChange'] = (
@@ -44,10 +49,6 @@ class Editor extends React.Component<IProps, {}> {
     this.props.onChange(content, editor)
   }
 
-  imageHander = (image: any, cb: any) => {
-    console.log(image)
-  }
-
   render() {
     return (
       <ReactQuill
@@ -55,9 +56,8 @@ class Editor extends React.Component<IProps, {}> {
         placeholder="请输入内容"
         value={this.props.value}
         onChange={this.handleChange}
-        modules={modules}
+        modules={this.state.modules}
         formats={formats}
-        // imageHander={this.imageHander}
         ref={el => (this.reactQuillRef = el as ReactQuill)}
       />
     )

@@ -1,14 +1,18 @@
 const axios = require('axios')
 const qiniu = require('qiniu')
 const dateFormat = require('dateformat')
+const path = require('path')
 const Ids = require('../models/ids')
 
+const baseUrl = 'http://p43e15da7.bkt.clouddn.com'
 qiniu.conf.ACCESS_KEY = 'uzq4hVSsnTdlKvDIJ7mCq_A2ugsbk2Jn-SSpdTBE'
 qiniu.conf.SECRET_KEY = 'iGO_mnUZhSLwLNaagmL6g-TKLqIeqFJ1Ny5Pw1cg'
 
 class BaseComponent {
   constructor() {
-    this.idList = ['admin_id', 'user_id', 'topic_id']
+    this.idList = ['admin_id', 'user_id', 'article_id', 'img_id']
+    this.uploadImg = this.uploadImg.bind(this)
+    this.qiniu = this.qiniu.bind(this)
   }
   async getId(type) {
     if (this.idList.indexOf(type) === -1) {
@@ -18,6 +22,9 @@ class BaseComponent {
     }
     try {
       const idData = await Ids.findOne()
+      if (!idData[type]) {
+        idData[type] = 0
+      }
       idData[type]++
       await idData.save()
       return idData[type]
@@ -38,25 +45,58 @@ class BaseComponent {
       }
     })
   }
-  async uploadImg(ctx, next) {}
-  async qiniu() {
-    const time = + new Date()
-    const key = dateFormat(time, 'yyyy/mm/dd') + '/' + time
+  async uploadImg(ctx, next) {
+    // console.log(ctx.request.body.files)
     try {
-      const token = this.uptoken('blog', key)
-      // const qiniuImg = await this.uploadFile(token, key, )
-    } catch (err) {}
+      const image = await this.qiniu(ctx)
+      ctx.body = {
+        code: 0,
+        image: {
+          ...image,
+          url: `${baseUrl}/${image.key}`
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      ctx.body = {
+        code: 1,
+        message: '上传图片失败'
+      }
+    }
+  }
+  async qiniu(ctx) {
+    return new Promise(async (resolve, reject) => {
+      const { files } = ctx.request.body
+      const time = +new Date()
+      const img_id = await this.getId('img_id')
+      const file = files.image || files.file
+      const localFile = file.path
+      const key =
+        dateFormat(time, 'yyyy/mm/dd') + '/' + time + '/' + img_id + path.extname(localFile)
+      try {
+        const token = this.uptoken('blog', key)
+        const qiniuImg = await this.uploadFile(token, key, localFile)
+        resolve(qiniuImg)
+      } catch (err) {
+        console.log('保存至七牛云失败', err)
+        reject('保存至七牛云失败')
+      }
+    })
   }
   uptoken(bucket, key) {
-    let putPolicy = new qiniu.rs.PutPolicy(bucket + ':' + key)
-    return putPolicy.token()
+    const putPolicy = new qiniu.rs.PutPolicy({
+      scope: bucket + ':' + key
+    })
+    return putPolicy.uploadToken()
   }
   uploadFile(uptoken, key, localFile) {
     return new Promise((resolve, reject) => {
-      var extra = new qiniu.io.PutExtra()
-      qiniu.io.putFile(uptoken, key, localFile, extra, function(err, ret) {
+      const formUploader = new qiniu.form_up.FormUploader()
+      const extra = new qiniu.form_up.PutExtra()
+      formUploader.putFile(uptoken, key, localFile, extra, function(err, ret) {
         if (!err) {
-          resolve(ret.key)
+          // console.log(ret)
+          resolve(ret)
         } else {
           console.log('图片上传至七牛失败', err)
           reject(err)

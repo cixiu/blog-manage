@@ -18,7 +18,7 @@ module.exports = {
         : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts', '.json'],
     alias: {
       '@': resolve('view'),
       store: resolve('view/store'),

@@ -8,8 +8,8 @@ import AuthRoute from './components/AuthRoute/AuthRoute'
 import Login from './pages/Login/Login'
 import AdminList from './pages/AdminList/AdminList'
 import UserList from './pages/UserList/UserList'
-import CreateTopic from './pages/CreateTopic/CreateTopic'
-import TopicList from './pages/TopicList/TopicList'
+import CreateArticle from './pages/CreateArticle/CreateArticle'
+import ArticleList from './pages/ArticleList/ArticleList'
 
 import { Layout } from 'antd'
 const { Content } = Layout
@@ -32,8 +32,8 @@ class App extends React.Component {
                 <Route path="/login" component={Login} />
                 <Route path="/admin_list" component={AdminList} />
                 <Route path="/user_list" component={UserList} />
-                <Route path="/create_topic" component={CreateTopic} />
-                <Route path="/topic_list" component={TopicList} />
+                <Route path="/create_article" component={CreateArticle} />
+                <Route path="/article_list" component={ArticleList} />
               </Switch>
             </Content>
           </Layout>

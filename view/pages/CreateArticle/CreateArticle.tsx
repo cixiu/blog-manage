@@ -1,18 +1,22 @@
 import * as React from 'react'
-import { Select, Form, Input, Button } from 'antd'
+import { RouteComponentProps } from 'react-router-dom'
+import { Select, Form, Input, Button, message } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import Editor, { UnprivilegedEditor } from '../../components/Editor/Editor'
+import PicturesWall from '../../components/PicturesWall/PicturesWall'
 // import * as styles from './index.scss'
+import { createArticle } from '../../api/article'
 
 const { Option } = Select
 const FormItem = Form.Item
 
-interface IProps extends FormComponentProps {} // tslint:disable-line
+interface IProps extends FormComponentProps, RouteComponentProps<any> {} // tslint:disable-line
 
-class CreateTopic extends React.Component<IProps, {}> {
+class CreateArticle extends React.Component<IProps, {}> {
   state = {
     contentText: '',
     contentHTML: '',
+    screenshot: '',
     tags: [
       'html',
       'css',
@@ -35,11 +39,31 @@ class CreateTopic extends React.Component<IProps, {}> {
 
   handleSubmit = (e: React.FormEvent<any>) => {
     e.preventDefault()
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       if (!err && this.state.contentText.trim()) {
         // 在这里进行post提交数据进数据库
-        console.log('Received values of form: ', values)
+        const data = {
+          categorys: values.categorys,
+          title: values.title,
+          screenshot: this.state.screenshot,
+          content: this.state.contentHTML
+        }
+        const res = await createArticle(data)
+        if (res.code === 0 ) {
+          message.success(res.message)
+          this.props.history.push('/article_list')
+        }
+        if (res.code === 1) {
+          message.info(res.message)
+        }
+        // console.log('Received values of form: ', data)
       }
+    })
+  }
+
+  getScreenShot = (url: string) => {
+    this.setState({
+      screenshot: url
     })
   }
 
@@ -54,7 +78,7 @@ class CreateTopic extends React.Component<IProps, {}> {
       <div>
         <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="文章标签" hasFeedback>
-            {getFieldDecorator('select-multiple', {
+            {getFieldDecorator('categorys', {
               rules: [
                 {
                   required: true,
@@ -73,7 +97,7 @@ class CreateTopic extends React.Component<IProps, {}> {
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="文章标题" hasFeedback>
-            {getFieldDecorator('topic-title', {
+            {getFieldDecorator('title', {
               rules: [
                 {
                   required: true,
@@ -81,6 +105,9 @@ class CreateTopic extends React.Component<IProps, {}> {
                 }
               ]
             })(<Input placeholder="请输入文章标题" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="文章封面">
+            <PicturesWall getScreenShot={this.getScreenShot}/>
           </FormItem>
           <FormItem
             className="has-error"
@@ -102,4 +129,4 @@ class CreateTopic extends React.Component<IProps, {}> {
   }
 }
 
-export default Form.create()(CreateTopic)
+export default Form.create()(CreateArticle)
