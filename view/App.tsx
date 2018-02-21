@@ -10,6 +10,7 @@ import AdminList from './pages/AdminList/AdminList'
 import UserList from './pages/UserList/UserList'
 import CreateArticle from './pages/CreateArticle/CreateArticle'
 import ArticleList from './pages/ArticleList/ArticleList'
+import EditorArticle from './pages/EditorArticle/EditorArticle'
 
 import { Layout } from 'antd'
 const { Content } = Layout
@@ -34,6 +35,7 @@ class App extends React.Component {
                 <Route path="/user_list" component={UserList} />
                 <Route path="/create_article" component={CreateArticle} />
                 <Route path="/article_list" component={ArticleList} />
+                <Route path="/article/editor/:id" component={EditorArticle} />
               </Switch>
             </Content>
           </Layout>

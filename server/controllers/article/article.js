@@ -12,12 +12,11 @@ class Article extends baseComponent {
   // 创建文章
   async create(ctx, next) {
     const { categorys, title, screenshot, content } = ctx.request.body
-    // console.log(ctx.session)
     try {
       const { admin_id } = ctx.session
       const admin = await AdminModel.findOne({ id: admin_id })
       // 只有超级管理员才能发布文章
-      if (admin.type === 0 ) {
+      if (admin.type === 0) {
         const article_id = await this.getId('article_id')
         const time = dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss')
         const newArticleInfo = {
@@ -84,6 +83,94 @@ class Article extends baseComponent {
       ctx.body = {
         code: 1,
         message: '获取文章列表数量失败'
+      }
+    }
+  }
+  // 删除文章
+  async deleteArticle(ctx, next) {
+    const { id } = ctx.query
+    try {
+      const { admin_id } = ctx.session
+      const admin = await AdminModel.findOne({ id: admin_id })
+      const article = await ArticleModel.findOne({ id })
+      if (!article.id) {
+        ctx.body = {
+          code: 1,
+          message: '没有找到该文章'
+        }
+      }
+      if (admin.type === 0) {
+        await ArticleModel.deleteOne({ id })
+        ctx.body = {
+          code: 0,
+          message: '文章删除成功!!!'
+        }
+      }
+      // 普通管理员不能操作文章
+      if (admin.type === 1) {
+        ctx.body = {
+          code: 1,
+          message: '普通管理员不能操作文章'
+        }
+      }
+    } catch (err) {
+      console.log('删除失败', err)
+      ctx.body = {
+        code: 1,
+        message: '删除失败'
+      }
+    }
+  }
+  // 文章详情
+  async getArticleDetail(ctx, next) {
+    const { id } = ctx.query
+    try {
+      const article = await ArticleModel.findOne({ id }, '-_id -__v')
+      if (!article) {
+        throw new Error('没有找到对应的文章')
+      } else {
+        ctx.body = {
+          code: 0,
+          data: article
+        }
+      }
+    } catch (err) {
+      console.log('没有找到对应的文章', err)
+      ctx.body = {
+        code: 1,
+        message: '没有找到对应的文章'
+      }
+    }
+  }
+  // 修改文章
+  async updateArticle(ctx, next) {
+    const { categorys, title, screenshot, content, id } = ctx.request.body
+    const last_update_time = dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss')
+    const newData = { categorys, title, screenshot, content, last_update_time }
+    try {
+      if (!id) {
+        throw new Error('请传入要更新的文章的id')
+      }
+      const { admin_id } = ctx.session
+      const admin = await AdminModel.findOne({ id: admin_id })
+      if (admin.type === 0) {
+        await ArticleModel.findOneAndUpdate({ id }, { $set: newData })
+        ctx.body = {
+          code: 0,
+          message: '更新文章成功!!'
+        }
+      }
+      if (admin.type === 1) {
+        ctx.body = {
+          code: 1,
+          message: '您没有修改文章的权限'
+        }
+      }
+    } catch (err) {
+      console.log('更新文章失败', err)
+      ctx.body = {
+        code: 1,
+        message: '更新文章失败!!'
       }
     }
   }

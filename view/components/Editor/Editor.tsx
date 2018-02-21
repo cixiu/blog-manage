@@ -26,14 +26,7 @@ class Editor extends React.Component<IProps, {}> {
 
   componentDidMount() {
     if (this.props.backfill) {
-      this.setState(
-        {
-          text: '<h1>数据回填</h1>'
-        },
-        () => {
-          this.reactQuillRef.blur()
-        }
-      )
+      this.reactQuillRef.blur()
     }
     this.setState({
       modules: modules(this.reactQuillRef)

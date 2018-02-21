@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Upload, Icon, Modal, message } from 'antd'
-import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
+import { UploadFile, UploadChangeParam, UploadFileStatus } from 'antd/lib/upload/interface'
 
 interface IState {
   previewVisible: boolean
@@ -9,6 +9,8 @@ interface IState {
 }
 interface IProps {
   getScreenShot: (url: string) => void
+  backfill?: boolean
+  url?: string
 }
 
 class PicturesWall extends React.Component<IProps, IState> {
@@ -16,6 +18,23 @@ class PicturesWall extends React.Component<IProps, IState> {
     previewVisible: false,
     previewImage: '',
     fileList: []
+  }
+
+  componentWillReceiveProps() {
+    const { backfill, url } = this.props
+    if (backfill && url) {
+      const file = {
+        uid: 1,
+        name: '',
+        status: 'done' as UploadFileStatus,
+        size: 0,
+        type: '',
+        url
+      }
+      this.setState({
+        fileList: [file]
+      })
+    }
   }
 
   handleCancel = () => {

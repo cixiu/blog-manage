@@ -4,18 +4,20 @@ import { Select, Form, Input, Button, message } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import Editor, { UnprivilegedEditor } from '../../components/Editor/Editor'
 import PicturesWall from '../../components/PicturesWall/PicturesWall'
-// import * as styles from './index.scss'
-import { createArticle } from '../../api/article'
+
+import { getArticleDetail, updateArticle } from '../../api/article'
 
 const { Option } = Select
 const FormItem = Form.Item
 
-interface IProps extends FormComponentProps, RouteComponentProps<any> {} // tslint:disable-line
+interface IProps extends FormComponentProps, RouteComponentProps<any> {}
 
-class CreateArticle extends React.Component<IProps, {}> {
+class EditorArticle extends React.Component<IProps, {}> {
   state = {
     contentText: '',
     contentHTML: '',
+    categorys: [],
+    title: '',
     screenshot: '',
     tags: [
       'html',
@@ -33,6 +35,19 @@ class CreateArticle extends React.Component<IProps, {}> {
     ]
   }
 
+  async componentDidMount() {
+    const id = Number(this.props.match.params.id)
+    const res = await getArticleDetail(id)
+    if (res.code === 0) {
+      this.setState({
+        categorys: res.data.category,
+        title: res.data.title,
+        screenshot: res.data.screenshot,
+        contentHTML: res.data.content
+      })
+    }
+  }
+
   handleChange = (content: string, editor: UnprivilegedEditor) => {
     this.setState({ contentHTML: content, contentText: editor.getText() })
   }
@@ -40,15 +55,16 @@ class CreateArticle extends React.Component<IProps, {}> {
   handleSubmit = (e: React.FormEvent<any>) => {
     e.preventDefault()
     this.props.form.validateFields(async (err, values) => {
-      if (!err && this.state.contentText.trim()) {
+      if (!err && this.state.contentHTML) {
         // 在这里进行post提交数据进数据库
         const data = {
           categorys: values.categorys,
           title: values.title,
           screenshot: this.state.screenshot,
-          content: this.state.contentHTML
+          content: this.state.contentHTML,
+          id: Number(this.props.match.params.id)
         }
-        const res = await createArticle(data)
+        const res = await updateArticle(data)
         if (res.code === 0 ) {
           message.success(res.message)
           this.props.history.push('/article_list')
@@ -68,7 +84,13 @@ class CreateArticle extends React.Component<IProps, {}> {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { contentText, contentHTML } = this.state
+    const {
+      contentText,
+      contentHTML,
+      categorys,
+      title,
+      screenshot
+    } = this.state
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 17 }
@@ -78,11 +100,12 @@ class CreateArticle extends React.Component<IProps, {}> {
         <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="文章标签" hasFeedback>
             {getFieldDecorator('categorys', {
+              initialValue: categorys,
               rules: [
                 {
                   required: true,
                   message: '请至少选择一个文章的标签',
-                  type: 'array',
+                  type: 'array'
                 }
               ]
             })(
@@ -97,6 +120,7 @@ class CreateArticle extends React.Component<IProps, {}> {
           </FormItem>
           <FormItem {...formItemLayout} label="文章标题" hasFeedback>
             {getFieldDecorator('title', {
+              initialValue: title,
               rules: [
                 {
                   required: true,
@@ -106,7 +130,11 @@ class CreateArticle extends React.Component<IProps, {}> {
             })(<Input placeholder="请输入文章标题" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="文章封面">
-            <PicturesWall getScreenShot={this.getScreenShot}/>
+            <PicturesWall
+              backfill
+              url={screenshot}
+              getScreenShot={this.getScreenShot}
+            />
           </FormItem>
           <FormItem
             className="has-error"
@@ -128,4 +156,4 @@ class CreateArticle extends React.Component<IProps, {}> {
   }
 }
 
-export default Form.create()(CreateArticle)
+export default Form.create()(EditorArticle)

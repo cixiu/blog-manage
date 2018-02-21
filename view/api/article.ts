@@ -5,6 +5,7 @@ interface IArticleParams {
   title: string
   screenshot: string
   content: string
+  id?: number
 }
 
 // 创建文章
@@ -18,7 +19,7 @@ export const createArticle = async (data: IArticleParams) => {
 }
 
 // 获取文章列表
-export const getArticleList = async ({limit = 10, offset = 0}) => {
+export const getArticleList = async ({ limit = 10, offset = 0 }) => {
   try {
     const res = await axios.get('/api/article/list', {
       params: {
@@ -35,6 +36,40 @@ export const getArticleList = async ({limit = 10, offset = 0}) => {
 export const getArticleCount = async () => {
   try {
     const res = await axios.get('/api/article/count')
+    return Promise.resolve(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+// 删除文章
+export const deleteArticle = async (id: number) => {
+  try {
+    const res = await axios.get('/api/article/delete', {
+      params: { id }
+    })
+    return Promise.resolve(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+// 获取对应文章详情
+export const getArticleDetail = async (id: number) => {
+  try {
+    const res = await axios.get('/api/article/detail', {
+      params: { id }
+    })
+    return Promise.resolve(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+// 更新对应文章
+export const updateArticle = async (data: IArticleParams) => {
+  try {
+    const res = await axios.post('/api/article/update', data)
     return Promise.resolve(res.data)
   } catch (err) {
     console.log(err)
