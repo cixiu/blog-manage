@@ -123,16 +123,22 @@ class Article extends baseComponent {
   }
   // 文章详情
   async getArticleDetail(ctx, next) {
-    const { id } = ctx.query
+    const { id, update } = ctx.query
     try {
       const article = await ArticleModel.findOne({ id }, '-_id -__v')
       if (!article) {
         throw new Error('没有找到对应的文章')
-      } else {
-        ctx.body = {
-          code: 0,
-          data: article
-        }
+      }
+      if (!update) {
+        const updateViewsCount = article.views_count + 1
+        await ArticleModel.findOneAndUpdate(
+          { id },
+          { $set: { views_count: updateViewsCount } }
+        )
+      }
+      ctx.body = {
+        code: 0,
+        data: article
       }
     } catch (err) {
       console.log('没有找到对应的文章', err)

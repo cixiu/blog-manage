@@ -55,10 +55,10 @@ export const deleteArticle = async (id: number) => {
 }
 
 // 获取对应文章详情
-export const getArticleDetail = async (id: number) => {
+export const getArticleDetail = async (id: number, update = true) => {
   try {
     const res = await axios.get('/api/article/detail', {
-      params: { id }
+      params: { id, update }
     })
     return Promise.resolve(res.data)
   } catch (err) {

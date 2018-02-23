@@ -69,10 +69,11 @@ class BaseComponent {
       const { files } = ctx.request.body
       const time = +new Date()
       const img_id = await this.getId('img_id')
+      const randomImgId = (time + Math.ceil(Math.random() * 10000)).toString(16)
       const file = files.image || files.file
       const localFile = file.path
       const key =
-        dateFormat(time, 'yyyy/mm/dd') + '/' + time + '/' + img_id + path.extname(localFile)
+        dateFormat(time, 'yyyy/mm/dd') + '/' + time + '/' + randomImgId + path.extname(localFile)
       try {
         const token = this.uptoken('blog', key)
         const qiniuImg = await this.uploadFile(token, key, localFile)
