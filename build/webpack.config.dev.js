@@ -6,15 +6,34 @@ const notifier = require('node-notifier')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const webpackMerge = require('webpack-merge')
 const baseConfig = require('./webpack.config.base')
-const config =require('../config')
+const config = require('../config')
 
 const resolve = dir => path.join(__dirname, '..', dir)
 
 const PORT = process.env.PORT || config.dev.port
 const HOST = process.env.HOST || config.dev.host
+const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = webpackMerge(baseConfig, {
   devtool: config.dev.devtool,
+  module: {
+    rules: [
+      // 针对antd样式 专门配置css-loader
+      {
+        test: /\.css$/,
+        include: [/node_modules/],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          }
+        ]
+      }
+    ]
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: resolve('index.html'),
@@ -53,7 +72,7 @@ module.exports = webpackMerge(baseConfig, {
       async: false,
       watch: resolve('view'),
       tsconfig: resolve('tsconfig.json'),
-      tslint: resolve('tslint.json'),
+      tslint: resolve('tslint.json')
     })
   ],
   // 更多webpack-dev-server的详细信息 https://webpack.js.org/configuration/dev-server/

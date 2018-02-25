@@ -1,6 +1,7 @@
 const path = require('path')
 const tsImportPluginFactory = require('ts-import-plugin')
 const autoprefixer = require('autoprefixer')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const config = require('../config')
 
 const resolve = dir => path.join(__dirname, '..', dir)
@@ -59,7 +60,7 @@ module.exports = {
                     style: 'css'
                   })
                 ]
-              }),
+              })
               // compilerOptions: {
               //   module: 'es2015'
               // }
@@ -104,20 +105,6 @@ module.exports = {
           {
             loader: 'sass-loader'
           }
-        ]
-      },
-      // 针对antd样式 专门配置css-loader
-      {
-        test: /\.css$/,
-        include: [/node_modules/],
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1
-            }
-          },
         ]
       },
       {
