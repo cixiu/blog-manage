@@ -15,8 +15,6 @@ import EditorArticle from './pages/EditorArticle/EditorArticle'
 import { Layout } from 'antd'
 const { Content } = Layout
 
-// import * as styles from './App.scss'
-
 @hot(module)
 class App extends React.Component {
   render() {

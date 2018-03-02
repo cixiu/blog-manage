@@ -4,7 +4,7 @@ const serverPort = 3001
 
 module.exports = {
   dev: {
-    // 路径
+    // 为资源指定公共路径
     assetsPublicPath: '/',
     // 代理
     proxyTable: {
