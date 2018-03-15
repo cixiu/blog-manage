@@ -5,6 +5,7 @@ interface IArticleParams {
   title: string
   screenshot: string
   content: string
+  description: string
   id?: number
 }
 

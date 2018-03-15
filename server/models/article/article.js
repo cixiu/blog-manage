@@ -2,10 +2,13 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const articleSchema = new Schema({
-  category: { type: Array, require: true, default: [] },
+  category: [{
+    title: String
+  }],
   title: { type: String, require: true },
   screenshot: { type: String },
   content: { type: String, require: true },
+  description: { type: String, require: true },
   author: { type: String, default: 'cixiu' },
   id: { type: Number }, // 文章的id
   create_time: { type: String },

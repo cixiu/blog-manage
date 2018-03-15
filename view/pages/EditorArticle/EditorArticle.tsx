@@ -38,9 +38,13 @@ class EditorArticle extends React.Component<IProps, {}> {
   async componentDidMount() {
     const id = Number(this.props.match.params.id)
     const res = await getArticleDetail(id)
+    const categorys: any[] = []
+    res.data.category.forEach((item: any) => {
+      categorys.push(item.title)
+    })
     if (res.code === 0) {
       this.setState({
-        categorys: res.data.category,
+        categorys,
         title: res.data.title,
         screenshot: res.data.screenshot,
         contentHTML: res.data.content
@@ -57,11 +61,13 @@ class EditorArticle extends React.Component<IProps, {}> {
     this.props.form.validateFields(async (err, values) => {
       if (!err && this.state.contentHTML) {
         // 在这里进行post提交数据进数据库
+        const description = this.state.contentText.substring(0, 100) + '...'
         const data = {
           categorys: values.categorys,
           title: values.title,
           screenshot: this.state.screenshot,
           content: this.state.contentHTML,
+          description,
           id: Number(this.props.match.params.id)
         }
         const res = await updateArticle(data)
@@ -91,6 +97,7 @@ class EditorArticle extends React.Component<IProps, {}> {
       title,
       screenshot
     } = this.state
+
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 17 }

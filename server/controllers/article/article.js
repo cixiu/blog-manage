@@ -3,6 +3,14 @@ const AdminModel = require('../../models/admin/admin')
 const baseComponent = require('../../base/baseComponent')
 const md5 = require('md5')
 const dateFormat = require('dateformat')
+const Ids = require('../../models/ids')
+
+const clean = async () => {
+  // await AdminModel.remove()
+  await ArticleModel.remove()
+  await Ids.remove()
+}
+// clean()
 
 class Article extends baseComponent {
   constructor() {
@@ -11,7 +19,17 @@ class Article extends baseComponent {
   }
   // 创建文章
   async create(ctx, next) {
-    const { categorys, title, screenshot, content } = ctx.request.body
+    const {
+      categorys,
+      title,
+      screenshot,
+      content,
+      description
+    } = ctx.request.body
+    const newCategory = []
+    categorys.forEach(item => {
+      newCategory.push({ title: item })
+    })
     try {
       const { admin_id } = ctx.session
       const admin = await AdminModel.findOne({ id: admin_id })
@@ -20,10 +38,11 @@ class Article extends baseComponent {
         const article_id = await this.getId('article_id')
         const time = dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss')
         const newArticleInfo = {
-          category: categorys,
+          category: newCategory,
           title,
           screenshot,
           content,
+          description,
           author: admin.user_name,
           id: article_id,
           create_time: time,
@@ -52,15 +71,53 @@ class Article extends baseComponent {
   }
   // 文章列表
   async getArticleList(ctx, next) {
-    const { limit = 10, offset = 0 } = ctx.query
+    const {
+      limit = 10,
+      offset = 0,
+      category = 'all',
+      sort = 'recently'
+    } = ctx.query
+    let articleList
     try {
-      const articleList = await ArticleModel.find({}, '-_id -__v')
-        .sort({ id: -1 })
+      if (category === 'all' && sort === 'recently') {
+        articleList = await ArticleModel.find({}, '-_id -__v -content')
+          .sort({ id: -1 })
+          .skip(Number(offset))
+          .limit(Number(limit))
+      } else if (category === 'all' && sort === 'read') {
+        articleList = await ArticleModel.find({}, '-_id -__v -content')
+          .sort({ views_count: -1 })
+          .skip(Number(offset))
+          .limit(Number(limit))
+      } else {
+        // 最近更新使用id进行排序
+        // 阅读最多使用views_count进行排序
+        const sort_map = {
+          recently: 'id',
+          read: 'views_count'
+        }
+        const sort_by = sort_map[sort]
+        // const articles = await ArticleModel.find({}, '-_id -__v -content')
+        //   .skip(Number(offset))
+        //   .limit(Number(limit))
+        articleList = await ArticleModel.find(
+          { category: { $elemMatch: { title: category } } },
+          '-_id -__v -content'
+        )
+        .sort({ [sort_by]: -1 })
         .skip(Number(offset))
         .limit(Number(limit))
-      ctx.body = {
-        code: 0,
-        data: articleList
+      }
+      if (!articleList || articleList.length === 0) {
+        ctx.body = {
+          code: 1,
+          message: '没有发现文章'
+        }
+      } else {
+        ctx.body = {
+          code: 0,
+          data: articleList
+        }
       }
     } catch (err) {
       console.log('获取文章列表失败', err)

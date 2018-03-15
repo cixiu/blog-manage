@@ -25,11 +25,9 @@ class CreateArticle extends React.Component<IProps, {}> {
       'es6',
       'react',
       'vue',
-      'ssr',
+      'angular',
       'webpack',
       'node',
-      'express',
-      'koa'
     ]
   }
 
@@ -41,12 +39,14 @@ class CreateArticle extends React.Component<IProps, {}> {
     e.preventDefault()
     this.props.form.validateFields(async (err, values) => {
       if (!err && this.state.contentText.trim()) {
+        const description = this.state.contentText.substring(0, 100) + '...'
         // 在这里进行post提交数据进数据库
         const data = {
           categorys: values.categorys,
           title: values.title,
           screenshot: this.state.screenshot,
-          content: this.state.contentHTML
+          content: this.state.contentHTML,
+          description
         }
         const res = await createArticle(data)
         if (res.code === 0 ) {
