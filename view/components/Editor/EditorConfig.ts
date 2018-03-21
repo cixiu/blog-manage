@@ -4,9 +4,10 @@ import axios from 'axios'
 
 export const modules = (ref: any) => {
   return {
+    syntax: true,
     toolbar: {
       container: [
-        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        ['bold', 'italic', 'underline', 'strike', 'code'], // toggled buttons
         ['blockquote', 'code-block'],
 
         [{ header: 1 }, { header: 2 }], // custom button values
@@ -78,6 +79,7 @@ export const formats = [
   'italic',
   'underline',
   'strike',
+  'code',
   'blockquote',
   'code-block',
   'header',

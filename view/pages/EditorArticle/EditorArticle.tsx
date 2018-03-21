@@ -32,7 +32,9 @@ class EditorArticle extends React.Component<IProps, {}> {
       'node',
       'express',
       'koa'
-    ]
+    ],
+    initial: false,
+    hasEdit: false
   }
 
   async componentDidMount() {
@@ -47,17 +49,33 @@ class EditorArticle extends React.Component<IProps, {}> {
         categorys,
         title: res.data.title,
         screenshot: res.data.screenshot,
-        contentHTML: res.data.content
+        contentHTML: res.data.content,
+        initial: true
       })
     }
   }
 
   handleChange = (content: string, editor: UnprivilegedEditor) => {
-    this.setState({ contentHTML: content, contentText: editor.getText() })
+    if (this.state.initial) {
+      this.setState({
+        contentText: editor.getText(),
+        initial: false
+      })
+      return
+    }
+    this.setState({
+      contentHTML: content,
+      contentText: editor.getText(),
+      hasEdit: true
+    })
   }
 
   handleSubmit = (e: React.FormEvent<any>) => {
     e.preventDefault()
+    if (!this.state.hasEdit) {
+      message.info('还没有修改文章哦~~')
+      return
+    }
     this.props.form.validateFields(async (err, values) => {
       if (!err && this.state.contentHTML) {
         // 在这里进行post提交数据进数据库
@@ -71,7 +89,7 @@ class EditorArticle extends React.Component<IProps, {}> {
           id: Number(this.props.match.params.id)
         }
         const res = await updateArticle(data)
-        if (res.code === 0 ) {
+        if (res.code === 0) {
           message.success(res.message)
           this.props.history.push('/article_list')
         }
