@@ -2,9 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const articleSchema = new Schema({
-  category: [{
-    title: String
-  }],
+  category: [
+    {
+      title: String
+    }
+  ],
   title: { type: String, require: true },
   screenshot: { type: String },
   content: { type: String, require: true },
@@ -17,28 +19,35 @@ const articleSchema = new Schema({
   comment_count: { type: Number, default: 0 }
 })
 
-const commentsSchema = new Schema({
-  comments: [
-    {
-      connent: { type: String },
-      createAt: { type: String },
-      id: { type: String }, // 评论的id
-      isLiked: { type: Boolean, default: false },
-      likesCount: { type: Number, default: 0 },
-      respComment: { type: String, default: '' }, // 对文章评论用户进行评论用户的id
-      respUser: { type: String }, // 对文章进行评论的用户id
-      subCount: { type: Number, default: 0 },
-      topComment: { type: Array, default: [] }, // 评论的评论列表
-      updateAt: { type: String },
-      userId: { type: String }
-    }
-  ],
-  count: { type: Number },
-  targetId: { type: Number } // 文章的id
-})
+// const commentSchema = new Schema({
+//   content: { type: String },
+//   createAt: { type: Number },
+//   id: { type: Number, default: 0 }, // 评论的id
+//   isLiked: { type: Boolean, default: false },
+//   likesCount: { type: Number, default: 0 },
+//   respComment: { type: String, default: '' }, // 对文章评论用户进行评论用户的id
+//   respUser: { type: String },
+//   respUserInfo: { type: Object, default: {} },
+//   subCount: { type: Number, default: 0 },
+//   topComment: { type: Array, default: [] }, // 评论的评论列表
+//   updateAt: { type: String },
+//   userId: { type: Number }, // 对文章进行评论的用户id
+//   userInfo: { type: Object }
+// }, {
+//   _id: false
+// })
+
+// const commentsSchema = new Schema({
+//   count: { type: Number, default: 0 },
+//   articleId: { type: Number }, // 文章的id
+//   comments: {
+//     type: [commentSchema],
+//     default: []
+//   }
+// })
 
 articleSchema.index({ id: 1 })
 const Article = mongoose.model('Article', articleSchema)
-const Comments = mongoose.model('Comments', commentsSchema)
+// const Comments = mongoose.model('Comments', commentsSchema)
 
-module.exports = { Article, Comments }
+module.exports = Article

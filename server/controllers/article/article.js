@@ -1,5 +1,6 @@
-const { Article: ArticleModel } = require('../../models/article/article')
 const AdminModel = require('../../models/admin/admin')
+const ArticleModel = require('../../models/article/article')
+const CommentsModel = require('../../models/comments/comments')
 const baseComponent = require('../../base/baseComponent')
 const md5 = require('md5')
 const dateFormat = require('dateformat')
@@ -48,7 +49,7 @@ class Article extends baseComponent {
           create_time: time,
           last_update_time: time
         }
-        await ArticleModel.create(newArticleInfo)
+        await Promise.all([ArticleModel.create(newArticleInfo), CommentsModel.create({articleId: article_id})])
         ctx.body = {
           code: 0,
           message: '文章发布成功!'

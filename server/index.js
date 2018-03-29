@@ -9,6 +9,19 @@ const router = require('./routes')
 const port = config.server.port || process.env.PORT
 const app = new Koa()
 
+app.use(async (ctx, next) => {
+	ctx.set("Access-Control-Allow-Origin", ctx.headers.origin || '*');
+	ctx.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+	ctx.set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  ctx.set("Access-Control-Allow-Credentials", true); //可以带cookies
+	ctx.set("X-Powered-By", '3.2.1')
+	if (ctx.method == 'OPTIONS') {
+	  	ctx.status = 200
+	} else {
+	  await next();
+	}
+});
+
 app.keys = ['this is a blog manage system writed by cixiu']
 const SESSION_CONFIG = {
   key: 'SID',
