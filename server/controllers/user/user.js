@@ -84,8 +84,8 @@ class User extends AddressComponent {
   // 获取用户信息
   async getUserInfo(ctx, next) {
     const user_id = ctx.session.user_id || ctx.query.user_id
-    console.log('session', ctx.session.user_id)
-    console.log('query', ctx.query.user_id)
+    // console.log('session', ctx.session.user_id)
+    // console.log('query', ctx.query.user_id)
     if (!user_id) {
       console.log('用户的session失效或者用户id没有传入或者未登录')
       ctx.body = {

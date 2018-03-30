@@ -157,17 +157,13 @@ class Comments extends baseComponent {
       }
     }
   }
-  // 评论的回复
-  async commentCreate(ctx, next) {
-
-  }
   // 回复评论
   async replyComment(ctx, next) {
     const articleId = Number(ctx.params.articleId)
     const commentId = Number(ctx.params.commentId)
     const userId = Number(ctx.params.userId)
     const respUserId = Number(ctx.params.respUserId)
-    const { content } = ctx.request.body
+    const { content, isReply = false } = ctx.request.body
     try{
       if (!articleId || !userId || !respUserId || !content) {
         ctx.body = {
@@ -187,6 +183,7 @@ class Comments extends baseComponent {
               content,
               createAt: +new Date(),
               id: comment.subComments.length + 1,
+              respComment: isReply ? true : false,
               respUserId: respUserInfo.id,
               respUserInfo,
               updateAt: dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss'),

@@ -3,38 +3,60 @@ import { message } from 'antd'
 import CommonUserList, {
   PaginationProps
 } from '../../components/CommonUserList/CommonUserList'
-import { getAdminList, getAdminCount } from '../../api/admin'
+import { getUserList, getUserCount } from '../../api/user'
 
 class UserList extends React.Component {
   state = {
-    adminList: [],
-    adminCount: 0,
+    userList: [],
+    userCount: 0,
     limit: 10,
-    offset: 0
+    offset: 0,
+    columns: [
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        width: '10%'
+      },
+      {
+        title: '用户名',
+        dataIndex: 'username',
+        width: '30%'
+      },
+      {
+        title: '注册时间',
+        dataIndex: 'create_time',
+        width: '30%'
+      },
+      {
+        title: '注册地址',
+        dataIndex: 'create_address',
+        width: '30%'
+      }
+    ]
   }
   async componentDidMount() {
     const { limit, offset } = this.state
-    const promises = [getAdminList({ limit, offset }), getAdminCount()]
-    const [resAdminList, resAdminCount] = await Promise.all(promises)
-    if (resAdminCount.code === 0) {
+    const promises = [getUserList({ limit, offset }), getUserCount()]
+    const [resUserList, resUserCount] = await Promise.all(promises)
+    if (resUserCount.code === 0) {
       this.setState({
-        adminCount: resAdminCount.count
+        userCount: resUserCount.count
       })
     }
-    if (resAdminList.code === 0) {
+    if (resUserList.code === 0) {
       this.setState({
-        adminList: resAdminList.data
+        userList: resUserList.data
       })
     } else {
-      message.error(resAdminList.message)
+      message.error(resUserList.message)
     }
   }
 
-  getAdminList = async ({limit, offset}: {limit: number; offset: number}) => {
-    const resAdminList = await getAdminList({ limit, offset })
-    if (resAdminList.code === 0) {
+  getUserList = async ({limit, offset}: {limit: number; offset: number}) => {
+    const resUserList = await getUserList({ limit, offset })
+    if (resUserList.code === 0) {
       this.setState({
-        adminList: resAdminList.data
+        userList: resUserList.data
       })
     }
   }
@@ -42,15 +64,16 @@ class UserList extends React.Component {
   handleChange = (pagination: PaginationProps, filters: string[], sorter: object) => {
     const {limit} = this.state
     const offset = ((pagination.current) as number - 1) * limit
-    this.getAdminList({limit, offset})
+    this.getUserList({limit, offset})
   }
   render() {
-    const { adminCount, adminList } = this.state
+    const { userCount, userList, columns } = this.state
     return (
       <CommonUserList
         title="用户列表"
-        total={adminCount}
-        dataSource={adminList}
+        total={userCount}
+        columns={columns}
+        dataSource={userList}
         onChange={this.handleChange}
       />
     )

@@ -10,7 +10,34 @@ class UserList extends React.Component {
     adminList: [],
     adminCount: 0,
     limit: 10,
-    offset: 0
+    offset: 0,
+    columns: [
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        width: '10%'
+      },
+      {
+        title: '用户名',
+        dataIndex: 'user_name',
+        width: '20%'
+      },
+      {
+        title: '管理员类型',
+        dataIndex: 'admin',
+        width: '20%'
+      },
+      {
+        title: '注册时间',
+        dataIndex: 'create_time',
+        width: '20%'
+      },
+      {
+        title: '注册地址',
+        dataIndex: 'create_address',
+        width: '30%'
+      }
+    ]
   }
   async componentDidMount() {
     const { limit, offset } = this.state
@@ -45,11 +72,12 @@ class UserList extends React.Component {
     this.getAdminList({limit, offset})
   }
   render() {
-    const { adminCount, adminList } = this.state
+    const { adminCount, adminList, columns } = this.state
     return (
       <CommonUserList
         title="用户列表"
         total={adminCount}
+        columns={columns}
         dataSource={adminList}
         onChange={this.handleChange}
       />

@@ -17,7 +17,7 @@ const commentObj = {
   likedUser: [userSchema],
   isLiked: { type: Boolean, default: false },
   likesCount: { type: Number, default: 0 },
-  respComment: { type: String, default: '' }, // 对文章评论用户进行评论用户的id
+  respComment: { type: Boolean, default: false }, // 是对评论的评论还是对评论的回复 默认false是评论
   respUserId: { type: Number, default: 0 },
   respUserInfo: { },
   topComment: { type: Array, default: [] }, // 评论的评论列表
