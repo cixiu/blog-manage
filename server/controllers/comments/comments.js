@@ -35,12 +35,13 @@ class Comments extends baseComponent {
           ArticleModel.findOne({ id: Number(articleId) })
         ])
         articleComments.count++
+        articleDetail.comment_count++
         const comment = {
           content,
           createAt: +new Date(),
           id: articleComments.comments.length + 1,
           respUserInfo: {
-            id: 0,  // id=0 表示的是作者 评论开始是针对文章的作者
+            id: 0, // id=0 表示的是作者 评论开始是针对文章的作者
             blogUser: articleDetail.author
           },
           updateAt: dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss'),
@@ -48,12 +49,8 @@ class Comments extends baseComponent {
           userInfo
         }
         articleComments.comments.push(comment)
-        await articleComments.save()
-        // const comments = await CommentsModel.findOne(
-        //   { articleId: Number(articleId) },
-        //   '-__v -_id'
-        // )
-        const res = await articleComments.comments.find((item, index) => {
+        await Promise.all([articleComments.save(), articleDetail.save()])
+        const res = articleComments.comments.find((item, index) => {
           return item.id === articleComments.comments.length
         })
         ctx.body = {
@@ -82,9 +79,10 @@ class Comments extends baseComponent {
         '-__v -_id'
       )
       if (Number(userId)) {
-
         for (const comment of articleComments.comments) {
-          const index = comment.likedUser.findIndex((item, index) => item.id === Number(userId))
+          const index = comment.likedUser.findIndex(
+            (item, index) => item.id === Number(userId)
+          )
           if (index > -1) {
             comment.isLiked = true
           } else {
@@ -121,13 +119,17 @@ class Comments extends baseComponent {
       }
       const [articleComments, userInfo] = await Promise.all([
         CommentsModel.findOne({ articleId: Number(articleId) }),
-        UserModel.findOne({ id: Number(userId) }, '-__v -_id -password'),
+        UserModel.findOne({ id: Number(userId) }, '-__v -_id -password')
       ])
       for (const comment of articleComments.comments) {
         if (comment.id === Number(commentId)) {
-          const index = comment.likedUser.findIndex((item, index) => item.id === Number(userId))
+          const index = comment.likedUser.findIndex(
+            (item, index) => item.id === Number(userId)
+          )
           if (index > -1) {
-            comment.likedUser = comment.likedUser.filter(user => user.id !== Number(userId))
+            comment.likedUser = comment.likedUser.filter(
+              user => user.id !== Number(userId)
+            )
             comment.likesCount = comment.likedUser.length
             await articleComments.save()
             ctx.body = {
@@ -164,19 +166,25 @@ class Comments extends baseComponent {
     const userId = Number(ctx.params.userId)
     const respUserId = Number(ctx.params.respUserId)
     const { content, isReply = false } = ctx.request.body
-    try{
+    try {
       if (!articleId || !userId || !respUserId || !content) {
         ctx.body = {
           code: 1,
           message: '参数错误'
         }
       } else {
-        const [articleComments, userInfo, respUserInfo] = await Promise.all([
+        const [
+          articleComments,
+          userInfo,
+          respUserInfo,
+          articleDetail
+        ] = await Promise.all([
           CommentsModel.findOne({ articleId }),
           UserModel.findOne({ id: userId }, '-__v -_id -password'),
           UserModel.findOne({ id: respUserId }, '-__v -_id -password'),
+          ArticleModel.findOne({ id: articleId })
         ])
-        // 评论的顶层评论
+        // 评论的评论或者回复
         for (const comment of articleComments.comments) {
           if (comment.id === commentId) {
             comment.subComments.push({
@@ -194,7 +202,11 @@ class Comments extends baseComponent {
           }
         }
         articleComments.count++
-        const comments = await articleComments.save()
+        articleDetail.comment_count++
+        const [comments] = await Promise.all([
+          articleComments.save(),
+          articleDetail.save()
+        ])
         const selectComment = comments.comments.find((item, index) => {
           return item.id === commentId
         })
@@ -202,9 +214,8 @@ class Comments extends baseComponent {
           code: 0,
           data: selectComment.subComments
         }
-        // 评论的回复
       }
-    }catch(err){
+    } catch (err) {
       console.log(err)
       ctx.body = {
         code: 1,
