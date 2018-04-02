@@ -1,18 +1,20 @@
 {
   "name": "node-blog",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "keywords": [],
+  "description":
+    "personal blog backend manage system with react and typescript(使用react和typescript构建个人博客后台系统)",
+  "main": "server/index.js",
+  "keywords": ["blog", "react", "typescript", "koa2"],
   "author": "cixiu",
   "license": "ISC",
   "scripts": {
-    "start": "webpack-dev-server --inline --progress --config build/webpack.config.dev.js",
-    "dev": "npm start",
-    "server": "cross-env NODE_ENV=development nodemon --watch server server/index.js",
+    "dev":
+      "webpack-dev-server --inline --progress --config build/webpack.config.dev.js",
+    "server":
+      "cross-env NODE_ENV=development nodemon --watch server server/index.js",
     "server:prod": "cross-env NODE_ENV=production node server/index.js",
-    "start:prod": "node server.prod.js",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "start": "npm run build && npm run server:prod"
   },
   "dependencies": {
     "antd": "^3.1.6",
