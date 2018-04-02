@@ -41,7 +41,7 @@ class BaseComponent {
       data,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'pplication/json'
+        'Content-Type': 'application/json'
       }
     })
   }

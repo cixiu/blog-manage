@@ -9,6 +9,7 @@ const router = require('./routes')
 const port = config.server.port || process.env.PORT
 const app = new Koa()
 
+// 设置CORS
 app.use(async (ctx, next) => {
 	ctx.set("Access-Control-Allow-Origin", ctx.headers.origin || '*');
 	ctx.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");

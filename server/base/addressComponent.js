@@ -1,4 +1,3 @@
-const axios = require('axios')
 const BaseComponent = require('./baseComponent')
 const ERR_OK = '1'
 
@@ -21,9 +20,7 @@ class AddressComponent extends BaseComponent {
         ip = '175.10.241.243'
       }
       try {
-        let result
-
-        result = await this.fetch('http://restapi.amap.com/v3/ip', {
+        let result = await this.fetch('http://restapi.amap.com/v3/ip', {
           ip,
           key: this.gaodekey
         })

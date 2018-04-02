@@ -15,7 +15,18 @@ const prodConfig = webpackMerge(baseConfig, {
   devtool: config.build.devtool,
   // 入口文件
   entry: {
-    app: ['babel-polyfill', resolve('view/index.tsx')]
+    app: resolve('view/index.tsx'),
+    vendor: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'redux',
+      'react-redux',
+      'redux-thunk',
+      'axios',
+      'babel-polyfill',
+      'react-quill'
+    ]
   },
   output: {
     filename: 'static/js/[name].[chunkhash].js'
@@ -61,6 +72,7 @@ const prodConfig = webpackMerge(baseConfig, {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
+      favicon: resolve('favicon.ico'),
       inject: true,
       minify: {
         removeComments: true,
