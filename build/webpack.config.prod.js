@@ -15,7 +15,7 @@ const prodConfig = webpackMerge(baseConfig, {
   devtool: config.build.devtool,
   // 入口文件
   entry: {
-    app: resolve('view/index.tsx'),
+    app: ['babel-polyfill', resolve('view/index.tsx')],
     vendor: [
       'react',
       'react-dom',
