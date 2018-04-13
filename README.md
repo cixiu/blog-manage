@@ -29,9 +29,12 @@ git clone https://github.com/cixiu/node-blog.git
 
 cd node-blog
 
+# 安装依赖
 npm install
 
+# 启动本地前端项目
 npm run dev
 
+# 启动本地服务项目
 npm run server:dev
 ```
