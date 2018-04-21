@@ -1,7 +1,6 @@
 # node-blog 接口文档
 
 > 项目地址：[manage.tzpcc.cn](https://manage.tzpcc.cn)
-
 > 本地地址: localhost:3001
 
 ## 目录
