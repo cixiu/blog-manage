@@ -18,16 +18,19 @@ class CreateArticle extends React.Component<IProps, {}> {
     contentHTML: '',
     screenshot: '',
     tags: [
-      'html',
-      'css',
-      'javascript',
-      'typescript',
-      'es6',
-      'react',
-      'vue',
-      'angular',
-      'webpack',
-      'node',
+      { tag: 'html', text: 'HTML' },
+      { tag: 'css', text: 'CSS' },
+      { tag: 'javascript', text: 'JavaScript' },
+      { tag: 'typescript', text: 'TypeScript' },
+      { tag: 'es6', text: 'ES6' },
+      { tag: 'react', text: 'React' },
+      { tag: 'vue', text: 'Vue' },
+      { tag: 'angular', text: 'Angular' },
+      { tag: 'webpack', text: 'Webpack' },
+      { tag: 'node', text: 'Node' },
+      { tag: 'zhuanzai', text: '转载' },
+      { tag: 'others', text: '其他' },
+      { tag: 'test', text: '测试' }
     ]
   }
 
@@ -88,8 +91,8 @@ class CreateArticle extends React.Component<IProps, {}> {
             })(
               <Select mode="multiple" placeholder="请至少选择一个文章的标签">
                 {this.state.tags.map(item => (
-                  <Option key={item} value={item}>
-                    {item}
+                  <Option key={item.tag} value={item.tag}>
+                    {item.text}
                   </Option>
                 ))}
               </Select>

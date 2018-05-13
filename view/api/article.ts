@@ -25,7 +25,8 @@ export const getArticleList = async ({ limit = 10, offset = 0 }) => {
     const res = await axios.get('/api/article/list', {
       params: {
         limit,
-        offset
+        offset,
+        show_test: true
       }
     })
     return Promise.resolve(res.data)

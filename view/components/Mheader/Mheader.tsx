@@ -38,7 +38,7 @@ class Mheader extends React.Component<IProps, {}> {
     return (
       <Header>
         <Row type="flex" gutter={16}>
-          <Col xs={24} sm={20} md={16} lg={8}>
+          <Col xs={0} sm={0} md={8} lg={8}>
             <Search
               className={styles.search}
               placeholder="input search text"
@@ -47,11 +47,11 @@ class Mheader extends React.Component<IProps, {}> {
             />
           </Col>
           <Col xs={0} sm={0} md={0} lg={8}>
-            <a href="https://www.baidu.com" target="_blank">
-              百度地址: www.baidu.com
+            <a href="https://www.tzpcc.cn" target="_blank">
+              博客地址: www.tzpcc.cn
             </a>
           </Col>
-          <Col xs={0} sm={4} md={8} lg={8}>
+          <Col xs={24} sm={24} md={16} lg={8}>
             <div className={styles.user}>
               <Dropdown
                 overlay={

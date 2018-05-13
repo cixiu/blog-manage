@@ -14,4 +14,9 @@
   color: $main-color;
   text-align: center;
 }
+:global{
+  a:focus {
+    text-decoration: none;
+  }
+}
 

@@ -1,12 +1,15 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const categorySchema = new Schema(
+  {
+    title: String
+  },
+  { _id: false }
+)
+
 const articleSchema = new Schema({
-  category: [
-    {
-      title: String
-    }
-  ],
+  category: [categorySchema],
   title: { type: String, require: true },
   screenshot: { type: String },
   content: { type: String, require: true },
@@ -16,7 +19,8 @@ const articleSchema = new Schema({
   create_time: { type: String },
   last_update_time: { type: String },
   views_count: { type: Number, default: 0 },
-  comment_count: { type: Number, default: 0 }
+  comment_count: { type: Number, default: 0 },
+  is_test: { type: Boolean, default: false }  // 文章是否为测试分类
 })
 
 // const commentSchema = new Schema({

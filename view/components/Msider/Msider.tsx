@@ -29,7 +29,9 @@ class Msider extends React.Component<IProps, {}> {
 
     return (
       <Sider className={styles.sider}>
-        <div className={styles.logo}>辞修的博客</div>
+        <a href="https://www.tzpcc.cn" target="_blank">
+          <div className={styles.logo}>辞修的博客</div>
+        </a>
         <Menu
           theme="dark"
           mode="inline"

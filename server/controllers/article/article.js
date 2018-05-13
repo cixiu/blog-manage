@@ -6,12 +6,19 @@ const md5 = require('md5')
 const dateFormat = require('dateformat')
 const Ids = require('../../models/ids')
 
-const clean = async () => {
-  // await AdminModel.remove()
-  await ArticleModel.remove()
-  await Ids.remove()
+const isTestArticle = categorys => {
+  let isTest = false
+  for (const cate of categorys) {
+    isTest = false
+    if (cate.title === 'test') {
+      isTest = true
+      break
+    }
+  }
+  return isTest
 }
-// clean()
+
+const filter = '-_id -__v -content -is_test'
 
 class Article extends baseComponent {
   constructor() {
@@ -31,6 +38,7 @@ class Article extends baseComponent {
     categorys.forEach(item => {
       newCategory.push({ title: item })
     })
+    const is_test = isTestArticle(newCategory)
     try {
       const { admin_id } = ctx.session
       const admin = await AdminModel.findOne({ id: admin_id })
@@ -47,9 +55,13 @@ class Article extends baseComponent {
           author: admin.user_name,
           id: article_id,
           create_time: time,
-          last_update_time: time
+          last_update_time: time,
+          is_test
         }
-        await Promise.all([ArticleModel.create(newArticleInfo), CommentsModel.create({articleId: article_id})])
+        await Promise.all([
+          ArticleModel.create(newArticleInfo),
+          CommentsModel.create({ articleId: article_id })
+        ])
         ctx.body = {
           code: 0,
           message: '文章发布成功!'
@@ -76,17 +88,23 @@ class Article extends baseComponent {
       limit = 10,
       offset = 0,
       category = 'all',
-      sort = 'recently'
+      sort = 'recently',
+      show_test = false
     } = ctx.query
     let articleList
     try {
+      /* 获取全部文章列表时的查询条件:
+       *    1.博客管理系统显示测试分类下的文章
+       *    2.博客前端地址不需要显示测试分类下的文章
+      */
+      const condition = show_test ? {} : { is_test: false }
       if (category === 'all' && sort === 'recently') {
-        articleList = await ArticleModel.find({}, '-_id -__v -content')
+        articleList = await ArticleModel.find(condition, filter)
           .sort({ id: -1 })
           .skip(Number(offset))
           .limit(Number(limit))
       } else if (category === 'all' && sort === 'read') {
-        articleList = await ArticleModel.find({}, '-_id -__v -content')
+        articleList = await ArticleModel.find(condition, filter)
           .sort({ views_count: -1 })
           .skip(Number(offset))
           .limit(Number(limit))
@@ -102,12 +120,15 @@ class Article extends baseComponent {
         //   .skip(Number(offset))
         //   .limit(Number(limit))
         articleList = await ArticleModel.find(
-          { category: { $elemMatch: { title: category } } },
-          '-_id -__v -content'
+          {
+            category: { $elemMatch: { title: category } },
+            is_test: category === 'test'
+          },
+          filter
         )
-        .sort({ [sort_by]: -1 })
-        .skip(Number(offset))
-        .limit(Number(limit))
+          .sort({ [sort_by]: -1 })
+          .skip(Number(offset))
+          .limit(Number(limit))
       }
       if (!articleList || articleList.length === 0) {
         ctx.body = {
