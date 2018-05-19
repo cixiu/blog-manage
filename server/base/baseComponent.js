@@ -4,7 +4,7 @@ const dateFormat = require('dateformat')
 const path = require('path')
 const Ids = require('../models/ids')
 
-const baseUrl = 'http://p43e15da7.bkt.clouddn.com'
+const baseUrl = 'https://blog.image.tzpcc.cn'
 qiniu.conf.ACCESS_KEY = 'uzq4hVSsnTdlKvDIJ7mCq_A2ugsbk2Jn-SSpdTBE'
 qiniu.conf.SECRET_KEY = 'iGO_mnUZhSLwLNaagmL6g-TKLqIeqFJ1Ny5Pw1cg'
 
@@ -73,7 +73,12 @@ class BaseComponent {
       const file = files.image || files.file
       const localFile = file.path
       const key =
-        dateFormat(time, 'yyyy/mm/dd') + '/' + time + '/' + randomImgId + path.extname(localFile)
+        dateFormat(time, 'yyyy/mm/dd') +
+        '/' +
+        time +
+        '/' +
+        randomImgId
+        // path.extname(localFile)
       try {
         const token = this.uptoken('blog', key)
         const qiniuImg = await this.uploadFile(token, key, localFile)

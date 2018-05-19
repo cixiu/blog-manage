@@ -1,6 +1,10 @@
 import * as React from 'react'
 import { Upload, Icon, Modal, message } from 'antd'
-import { UploadFile, UploadChangeParam, UploadFileStatus } from 'antd/lib/upload/interface'
+import {
+  UploadFile,
+  UploadChangeParam,
+  UploadFileStatus
+} from 'antd/lib/upload/interface'
 
 interface IState {
   previewVisible: boolean
@@ -50,11 +54,20 @@ class PicturesWall extends React.Component<IProps, IState> {
 
   handleChange = ({ file, fileList }: UploadChangeParam) => {
     if (file.status === 'done' && file.response && file.response.code === 0) {
-      fileList[0].url = file.response.image.url
-      fileList[0].thumbUrl = file.response.image.url
-      this.props.getScreenShot(file.response.image.url)
+      // 封面图片采用imageView1304x734图片样式
+      const imageView1304x734 =
+        '?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1'
+      const url = file.response.image.url + imageView1304x734
+
+      fileList[0].url = url
+      fileList[0].thumbUrl = url
+      this.props.getScreenShot(url)
       message.success('图片上传成功')
-    } else if (file.status === 'done' && file.response && file.response.code !== 0) {
+    } else if (
+      file.status === 'done' &&
+      file.response &&
+      file.response.code !== 0
+    ) {
       fileList = []
       message.error('图片上传失败，请重新上传!!')
     }
