@@ -231,7 +231,19 @@ class Article extends baseComponent {
   async updateArticle(ctx, next) {
     const { categorys, title, screenshot, content, id } = ctx.request.body
     const last_update_time = dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss')
-    const newData = { categorys, title, screenshot, content, last_update_time }
+    const newCategory = []
+    categorys.forEach(item => {
+      newCategory.push({ title: item })
+    })
+    const is_test = isTestArticle(newCategory)
+    const newData = {
+      category: newCategory,
+      title,
+      screenshot,
+      content,
+      last_update_time,
+      is_test
+    }
     try {
       if (!id) {
         throw new Error('请传入要更新的文章的id')
