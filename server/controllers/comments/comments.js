@@ -41,6 +41,13 @@ class Comments extends baseComponent {
           UserModel.findOne({ id: Number(userId) }, '-__v -_id -password'),
           ArticleModel.findOne({ id: Number(articleId) })
         ])
+        if (!articleComments || !userInfo || !articleDetail) {
+          ctx.body = {
+            code: 1,
+            message: '没有找到对应的数据'
+          }
+          return
+        }
         articleComments.count++
         articleDetail.comment_count++
         const comment = {

@@ -1,6 +1,6 @@
 {
   "name": "node-blog",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description":
     "personal blog backend manage system with react and typescript(使用react和typescript构建个人博客后台系统)",
   "main": "server/index.js",

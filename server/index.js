@@ -54,12 +54,18 @@ if (process.env.NODE_ENV === 'production') {
   const Static = require('koa-static')
   const convert = require('koa-convert')
   const historyApiFallback = require('koa-connect-history-api-fallback')
+  const serverPort = process.env.PORT || 9002
   app.use(convert(historyApiFallback()))
   app.use(Static(path.join(__dirname, '../dist')))
+  app.listen(serverPort, err => {
+    if (!err) {
+      console.log(`Server is running at ${serverPort}`)
+    }
+  })
+} else {
+  app.listen(port, err => {
+    if (!err) {
+      console.log(`Server is running at ${port}`)
+    }
+  })
 }
-
-app.listen(port, err => {
-  if (!err) {
-    console.log(`Server is running at ${port}`)
-  }
-})
