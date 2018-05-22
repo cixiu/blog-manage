@@ -118,12 +118,12 @@ const prodConfig = webpackMerge(baseConfig, {
     }),
     new webpack.HashedModuleIdsPlugin(),
     // 以一个单独的进程来运行ts类型检查和lint来加快编译速度，配合ts-loader使用
-    new ForkTsCheckerWebpackPlugin({
-      async: false,
-      watch: resolve('view'),
-      tsconfig: resolve('tsconfig.json'),
-      tslint: resolve('tslint.json')
-    })
+    // new ForkTsCheckerWebpackPlugin({
+    //   async: false,
+    //   watch: resolve('view'),
+    //   tsconfig: resolve('tsconfig.json'),
+    //   tslint: resolve('tslint.json')
+    // })
   ],
   // 某些第三方库使用了node原生的变量或者模块，但是在浏览器中并不会使用他们
   // 所以给这些变量或者模块提供一个空的对象，来让这些库正常运行
