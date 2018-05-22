@@ -3,7 +3,7 @@ const config = require('../../config/index')
 
 let db_url = config.server.db_url
 if (process.env.NODE_ENV === 'production') {
-  db_url = 'mongodb://blog_runner:cheng2869070@127.0.0.1:19999/blog-db'
+  db_url = 'mongodb://blog_runner:cheng2869070@127.0.0.1:19999/blog'
 }
 mongoose.Promise = global.Promise
 // 连接数据库
