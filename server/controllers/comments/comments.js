@@ -20,6 +20,13 @@ const Ids = require('../../models/ids')
 class Comments extends baseComponent {
   // 创造评论
   async create(ctx, next) {
+    if (!ctx.cookies.get('userId')) {
+      ctx.body = {
+        code: 1,
+        message: 'No Permission'
+      }
+      return
+    }
     const { articleId } = ctx.params
     const { userId, content } = ctx.request.body
     try {
@@ -104,6 +111,13 @@ class Comments extends baseComponent {
   }
   // 点赞评论
   async likeComment(ctx, next) {
+    if (!ctx.cookies.get('userId')) {
+      ctx.body = {
+        code: 1,
+        message: 'No Permission'
+      }
+      return
+    }
     const { articleId } = ctx.params
     const { commentId, userId } = ctx.request.body
     try {
@@ -161,6 +175,13 @@ class Comments extends baseComponent {
   }
   // 回复评论
   async replyComment(ctx, next) {
+    if (!ctx.cookies.get('userId')) {
+      ctx.body = {
+        code: 1,
+        message: 'No Permission'
+      }
+      return
+    }
     const articleId = Number(ctx.params.articleId)
     const commentId = Number(ctx.params.commentId)
     const userId = Number(ctx.params.userId)

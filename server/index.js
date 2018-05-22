@@ -18,7 +18,6 @@ app.use(async (ctx, next) => {
   )
   ctx.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
   ctx.set('Access-Control-Allow-Credentials', true) //可以带cookies
-  ctx.set('X-Powered-By', '3.2.1')
   if (ctx.method == 'OPTIONS') {
     ctx.status = 200
   } else {
@@ -31,7 +30,7 @@ const SESSION_CONFIG = {
   key: 'SID',
   maxAge: 30 * 24 * 60 * 60 * 1000,
   overwrite: true,
-  signed: true
+  signed: true,
 }
 app.use(session(SESSION_CONFIG, app))
 app.use(
