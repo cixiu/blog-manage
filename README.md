@@ -11,14 +11,14 @@
 * 前端 react+react-router+typescript
 * 后端 koa2+mongoose
 
-  4.博客后台系统主要提供以下功能：
+4.博客后台系统主要提供以下功能：
 
 * 查看管理员列表
 * 查看用户列表
 * 发布文章(需要超级管理员，使用的是 quill 富文本编辑器)
 * 查看文章列表(支持修改和删除)
 
-  5.node-blog 接口文档：[API 文档](https://github.com/cixiu/node-blog/blob/master/API.md)
+5.node-blog 接口文档：[API 文档](https://github.com/cixiu/node-blog/blob/master/API.md)
 
 ## 线上地址
 
