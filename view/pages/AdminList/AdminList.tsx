@@ -24,7 +24,7 @@ class UserList extends React.Component {
       },
       {
         title: '管理员类型',
-        dataIndex: 'admin',
+        dataIndex: 'role',
         width: '20%'
       },
       {
@@ -71,6 +71,7 @@ class UserList extends React.Component {
     const offset = ((pagination.current) as number - 1) * limit
     this.getAdminList({limit, offset})
   }
+
   render() {
     const { adminCount, adminList, columns } = this.state
     return (

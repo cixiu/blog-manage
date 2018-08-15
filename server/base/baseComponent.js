@@ -99,9 +99,10 @@ class BaseComponent {
     return new Promise((resolve, reject) => {
       const formUploader = new qiniu.form_up.FormUploader()
       const extra = new qiniu.form_up.PutExtra()
-      formUploader.putFile(uptoken, key, localFile, extra, function(err, ret) {
+      formUploader.putFile(uptoken, key, localFile, extra, function(err, ret, info) {
         if (!err) {
           // console.log(ret)
+          // console.log(info)
           resolve(ret)
         } else {
           console.log('图片上传至七牛失败', err)

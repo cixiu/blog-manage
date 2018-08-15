@@ -17,7 +17,7 @@ app.use(async (ctx, next) => {
     'Content-Type, Authorization, X-Requested-With'
   )
   ctx.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
-  ctx.set('Access-Control-Allow-Credentials', true) //可以带cookies
+  ctx.set('Access-Control-Allow-Credentials', 'true') //可以带cookies
   if (ctx.method == 'OPTIONS') {
     ctx.status = 200
   } else {
