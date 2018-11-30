@@ -5,7 +5,7 @@ const convert = require('koa-convert')
 const historyApiFallback = require('koa-connect-history-api-fallback')
 const app = new Koa()
 
-const proxyHost = 'http://localhost:3001'
+const proxyHost = 'http://localhost:9002'
 app.use(
   convert(
     proxy({
@@ -18,7 +18,7 @@ app.use(
 app.use(convert(historyApiFallback()))
 app.use(Static('./dist'))
 
-const port = 9000
+const port = 9003
 app.listen(port, err => {
   if (!err) {
     console.log(`Server is running at ${port}`)

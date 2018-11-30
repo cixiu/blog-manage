@@ -4,8 +4,11 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { createStore, compose, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
+import axios from 'axios';
 import rootReducers from './store'
 import App from './App'
+
+axios.defaults.withCredentials = true
 
 const initialState = {
   adminInfo: {}
