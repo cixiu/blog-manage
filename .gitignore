@@ -12,6 +12,3 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-
-# 线上的一些配置文件
-ecosystem.json
